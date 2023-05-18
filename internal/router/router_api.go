@@ -5,8 +5,10 @@ import (
 	"github.com/xinliangnote/go-gin-api/internal/api/authorized"
 	"github.com/xinliangnote/go-gin-api/internal/api/config"
 	"github.com/xinliangnote/go-gin-api/internal/api/cron"
+	"github.com/xinliangnote/go-gin-api/internal/api/event"
 	"github.com/xinliangnote/go-gin-api/internal/api/helper"
 	"github.com/xinliangnote/go-gin-api/internal/api/menu"
+	"github.com/xinliangnote/go-gin-api/internal/api/order"
 	"github.com/xinliangnote/go-gin-api/internal/api/tool"
 	"github.com/xinliangnote/go-gin-api/internal/pkg/core"
 )
@@ -28,6 +30,10 @@ func setApiRouter(r *resource) {
 	login := r.mux.Group("/api", r.interceptors.CheckSignature())
 	{
 		login.POST("/login", adminHandler.Login())
+		//event
+		eventHandler := event.New(r.logger, r.db, r.cache)
+		login.GET("/event", eventHandler.List())
+		login.GET("/event:id", eventHandler.Detail())
 	}
 
 	// 需要签名验证、登录验证，无需 RBAC 权限验证
@@ -98,6 +104,12 @@ func setApiRouter(r *resource) {
 		api.POST("/cron/:id", core.AliasForRecordMetrics("/api/cron/modify"), cronHandler.Modify())
 		api.PATCH("/cron/used", cronHandler.UpdateUsed())
 		api.PATCH("/cron/exec/:id", core.AliasForRecordMetrics("/api/cron/exec"), cronHandler.Execute())
+
+		// order
+		orderHandler := order.New(r.logger, r.db, r.cache)
+		api.POST("/order/create", orderHandler.Create())
+		api.POST("/order/cancel", orderHandler.Cancel())
+		api.GET("/order:id", orderHandler.Detail())
 
 	}
 }

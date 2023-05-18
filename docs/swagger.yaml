@@ -429,6 +429,14 @@ definitions:
         description: 主键ID
         type: integer
     type: object
+  event.detailRequest:
+    type: object
+  event.detailResponse:
+    type: object
+  event.listRequest:
+    type: object
+  event.listResponse:
+    type: object
   helper.md5Response:
     properties:
       md5_str:
@@ -576,6 +584,18 @@ definitions:
       id:
         description: 主键ID
         type: integer
+    type: object
+  order.cancelRequest:
+    type: object
+  order.cancelResponse:
+    type: object
+  order.createRequest:
+    type: object
+  order.createResponse:
+    type: object
+  order.detailRequest:
+    type: object
+  order.detailResponse:
     type: object
   tool.dbData:
     properties:
@@ -1627,6 +1647,58 @@ paths:
       summary: 更新任务为启用/禁用
       tags:
       - API.cron
+  /api/event:
+    get:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: 事件列表
+      parameters:
+      - description: 请求信息
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/event.listRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/event.listResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/code.Failure'
+      summary: 事件列表
+      tags:
+      - API.event
+  /api/event/{id}:
+    get:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: 事件
+      parameters:
+      - description: 请求信息
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/event.detailRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/event.detailResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/code.Failure'
+      summary: 事件
+      tags:
+      - API.event
   /api/login:
     post:
       consumes:
@@ -1914,6 +1986,84 @@ paths:
       summary: 删除功能权限
       tags:
       - API.menu
+  /api/order/{id}:
+    get:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: 取消订单
+      parameters:
+      - description: 请求信息
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/order.detailRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/order.detailResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/code.Failure'
+      summary: 取消订单
+      tags:
+      - API.order
+  /api/order/cancel:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: 取消订单
+      parameters:
+      - description: 请求信息
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/order.cancelRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/order.cancelResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/code.Failure'
+      summary: 取消订单
+      tags:
+      - API.order
+  /api/order/create:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: 创建订单
+      parameters:
+      - description: 请求信息
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/order.createRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/order.createResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/code.Failure'
+      summary: 创建订单
+      tags:
+      - API.order
   /api/tool/cache/clear:
     patch:
       consumes:

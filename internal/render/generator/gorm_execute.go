@@ -44,7 +44,7 @@ func (h *handler) GormExecute() core.HandlerFunc {
 
 		var stderr bytes.Buffer
 		command.Stderr = &stderr
-
+		fmt.Println(command)
 		output, err := command.Output()
 		if err != nil {
 			c.Payload(stderr.String())

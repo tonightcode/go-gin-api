@@ -1,15 +1,15 @@
-package authorized_api
+package event
 
 import "time"
 
-// AuthorizedApi 已授权接口地址表
+// Event 事件表
 //
-//go:generate gormgen -structs AuthorizedApi -input .
-type AuthorizedApi struct {
+//go:generate gormgen -structs Event -input .
+type Event struct {
 	Id          int32     // 主键
-	BusinessKey string    // 调用方key
-	Method      string    // 请求方式
-	Api         string    // 请求地址
+	Title       string    // 标题
+	Content     string    // 详情
+	Cover       string    //封面
 	IsDeleted   int32     // 是否删除 1:是  -1:否
 	CreatedAt   time.Time `gorm:"time"` // 创建时间
 	CreatedUser string    // 创建人

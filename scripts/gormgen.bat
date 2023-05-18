@@ -10,7 +10,7 @@ echo failed!!!
 exit 1
 )
 echo.
-echo create curd code :
+echo build gormgen :
 echo.
 go build -o gormgen .\cmd\gormgen\main.go
 if %errorlevel% == 1 (
@@ -19,6 +19,7 @@ echo failed!!!
 exit 1
 )
 
+echo move gormgen :
 if exist %GOPATH%\bin (
 move gormgen %GOPATH%\bin\gormgen.exe
 ) else (
@@ -31,6 +32,7 @@ echo failed!!!
 exit 1
 )
 
+echo create curd code :
 go generate .\...
 if %errorlevel% == 1 (
 echo.
