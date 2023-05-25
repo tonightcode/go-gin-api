@@ -1,12 +1,21 @@
 package event
 
 import (
+	"time"
+
 	"github.com/xinliangnote/go-gin-api/internal/pkg/core"
 )
 
 type detailRequest struct{}
 
-type detailResponse struct{}
+type detailResponse struct {
+	Id         int32     `json:"id"`         // ID
+	Title      string    `json:"title"`      // title
+	Content    string    `json:"content"`    // content
+	Cover      string    `json:"cover"`      // cover
+	Created_at time.Time `json:"created_at"` // create time
+	Updated_at time.Time `json:"updated_at"` // update time
+}
 
 // Detail 事件
 // @Summary 事件

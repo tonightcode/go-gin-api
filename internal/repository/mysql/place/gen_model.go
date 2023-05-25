@@ -1,15 +1,19 @@
-package event
+package place
 
 import "time"
 
-// Event 事件表
+// Place 地点表
 //
-//go:generate gormgen -structs Event -input .
-type Event struct {
+//go:generate gormgen -structs Place -input .
+type Place struct {
 	Id          int32     // 主键
-	Title       string    // 标题
+	Name        string    // 名称
 	Content     string    // 详情
-	Cover       string    // 封面
+	Province    string    // 省份
+	City        string    // 城市
+	County      string    // 区县
+	Img         string    // 图片
+	Address     string    // 地址
 	IsDeleted   int32     // 是否删除 1:是  -1:否
 	CreatedAt   time.Time `gorm:"time"` // 创建时间
 	CreatedUser string    // 创建人

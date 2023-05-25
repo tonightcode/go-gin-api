@@ -1,12 +1,12 @@
-#### go_gin_api.event 
-事件表
+#### go_gin_api.person 
+人物表
 
 | 序号 | 名称 | 描述 | 类型 | 键 | 为空 | 额外 | 默认值 |
 | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
 | 1 | id | 主键 | int(11) unsigned | PRI | NO | auto_increment |  |
-| 2 | title | 标题 | varchar(255) |  | NO |  |  |
-| 3 | content | 详情 | text |  | YES |  |  |
-| 4 | cover | 封面 | varchar(255) |  | YES |  |  |
+| 2 | username | 名字 | varchar(255) |  | NO |  |  |
+| 3 | intro | 详情 | text |  | YES |  |  |
+| 4 | icon | 头像 | varchar(255) |  | YES |  |  |
 | 5 | is_deleted | 是否删除 1:是  -1:否 | tinyint(1) |  | NO |  | -1 |
 | 6 | created_at | 创建时间 | timestamp |  | NO |  | CURRENT_TIMESTAMP |
 | 7 | created_user | 创建人 | varchar(60) |  | NO |  |  |

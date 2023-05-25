@@ -7,6 +7,7 @@ import (
 	"github.com/xinliangnote/go-gin-api/internal/repository/redis"
 	"github.com/xinliangnote/go-gin-api/internal/services/event"
 	"github.com/xinliangnote/go-gin-api/pkg/hash"
+
 	"go.uber.org/zap"
 )
 

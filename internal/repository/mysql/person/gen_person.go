@@ -3,7 +3,7 @@
 //        ANY CHANGES DONE HERE WILL BE LOST             //
 ///////////////////////////////////////////////////////////
 
-package event
+package person
 
 import (
 	"fmt"
@@ -15,22 +15,22 @@ import (
 	"gorm.io/gorm"
 )
 
-func NewModel() *Event {
-	return new(Event)
+func NewModel() *Person {
+	return new(Person)
 }
 
-func NewQueryBuilder() *eventQueryBuilder {
-	return new(eventQueryBuilder)
+func NewQueryBuilder() *personQueryBuilder {
+	return new(personQueryBuilder)
 }
 
-func (t *Event) Create(db *gorm.DB) (id int32, err error) {
+func (t *Person) Create(db *gorm.DB) (id int32, err error) {
 	if err = db.Create(t).Error; err != nil {
 		return 0, errors.Wrap(err, "create err")
 	}
 	return t.Id, nil
 }
 
-type eventQueryBuilder struct {
+type personQueryBuilder struct {
 	order []string
 	where []struct {
 		prefix string
@@ -40,7 +40,7 @@ type eventQueryBuilder struct {
 	offset int
 }
 
-func (qb *eventQueryBuilder) buildQuery(db *gorm.DB) *gorm.DB {
+func (qb *personQueryBuilder) buildQuery(db *gorm.DB) *gorm.DB {
 	ret := db
 	for _, where := range qb.where {
 		ret = ret.Where(where.prefix, where.value)
@@ -52,8 +52,8 @@ func (qb *eventQueryBuilder) buildQuery(db *gorm.DB) *gorm.DB {
 	return ret
 }
 
-func (qb *eventQueryBuilder) Updates(db *gorm.DB, m map[string]interface{}) (err error) {
-	db = db.Model(&Event{})
+func (qb *personQueryBuilder) Updates(db *gorm.DB, m map[string]interface{}) (err error) {
+	db = db.Model(&Person{})
 
 	for _, where := range qb.where {
 		db.Where(where.prefix, where.value)
@@ -65,28 +65,28 @@ func (qb *eventQueryBuilder) Updates(db *gorm.DB, m map[string]interface{}) (err
 	return nil
 }
 
-func (qb *eventQueryBuilder) Delete(db *gorm.DB) (err error) {
+func (qb *personQueryBuilder) Delete(db *gorm.DB) (err error) {
 	for _, where := range qb.where {
 		db = db.Where(where.prefix, where.value)
 	}
 
-	if err = db.Delete(&Event{}).Error; err != nil {
+	if err = db.Delete(&Person{}).Error; err != nil {
 		return errors.Wrap(err, "delete err")
 	}
 	return nil
 }
 
-func (qb *eventQueryBuilder) Count(db *gorm.DB) (int64, error) {
+func (qb *personQueryBuilder) Count(db *gorm.DB) (int64, error) {
 	var c int64
-	res := qb.buildQuery(db).Model(&Event{}).Count(&c)
+	res := qb.buildQuery(db).Model(&Person{}).Count(&c)
 	if res.Error != nil && res.Error == gorm.ErrRecordNotFound {
 		c = 0
 	}
 	return c, res.Error
 }
 
-func (qb *eventQueryBuilder) First(db *gorm.DB) (*Event, error) {
-	ret := &Event{}
+func (qb *personQueryBuilder) First(db *gorm.DB) (*Person, error) {
+	ret := &Person{}
 	res := qb.buildQuery(db).First(ret)
 	if res.Error != nil && res.Error == gorm.ErrRecordNotFound {
 		ret = nil
@@ -94,7 +94,7 @@ func (qb *eventQueryBuilder) First(db *gorm.DB) (*Event, error) {
 	return ret, res.Error
 }
 
-func (qb *eventQueryBuilder) QueryOne(db *gorm.DB) (*Event, error) {
+func (qb *personQueryBuilder) QueryOne(db *gorm.DB) (*Person, error) {
 	qb.limit = 1
 	ret, err := qb.QueryAll(db)
 	if len(ret) > 0 {
@@ -103,23 +103,23 @@ func (qb *eventQueryBuilder) QueryOne(db *gorm.DB) (*Event, error) {
 	return nil, err
 }
 
-func (qb *eventQueryBuilder) QueryAll(db *gorm.DB) ([]*Event, error) {
-	var ret []*Event
+func (qb *personQueryBuilder) QueryAll(db *gorm.DB) ([]*Person, error) {
+	var ret []*Person
 	err := qb.buildQuery(db).Find(&ret).Error
 	return ret, err
 }
 
-func (qb *eventQueryBuilder) Limit(limit int) *eventQueryBuilder {
+func (qb *personQueryBuilder) Limit(limit int) *personQueryBuilder {
 	qb.limit = limit
 	return qb
 }
 
-func (qb *eventQueryBuilder) Offset(offset int) *eventQueryBuilder {
+func (qb *personQueryBuilder) Offset(offset int) *personQueryBuilder {
 	qb.offset = offset
 	return qb
 }
 
-func (qb *eventQueryBuilder) WhereId(p mysql.Predicate, value int32) *eventQueryBuilder {
+func (qb *personQueryBuilder) WhereId(p mysql.Predicate, value int32) *personQueryBuilder {
 	qb.where = append(qb.where, struct {
 		prefix string
 		value  interface{}
@@ -130,7 +130,7 @@ func (qb *eventQueryBuilder) WhereId(p mysql.Predicate, value int32) *eventQuery
 	return qb
 }
 
-func (qb *eventQueryBuilder) WhereIdIn(value []int32) *eventQueryBuilder {
+func (qb *personQueryBuilder) WhereIdIn(value []int32) *personQueryBuilder {
 	qb.where = append(qb.where, struct {
 		prefix string
 		value  interface{}
@@ -141,7 +141,7 @@ func (qb *eventQueryBuilder) WhereIdIn(value []int32) *eventQueryBuilder {
 	return qb
 }
 
-func (qb *eventQueryBuilder) WhereIdNotIn(value []int32) *eventQueryBuilder {
+func (qb *personQueryBuilder) WhereIdNotIn(value []int32) *personQueryBuilder {
 	qb.where = append(qb.where, struct {
 		prefix string
 		value  interface{}
@@ -152,7 +152,7 @@ func (qb *eventQueryBuilder) WhereIdNotIn(value []int32) *eventQueryBuilder {
 	return qb
 }
 
-func (qb *eventQueryBuilder) OrderById(asc bool) *eventQueryBuilder {
+func (qb *personQueryBuilder) OrderById(asc bool) *personQueryBuilder {
 	order := "DESC"
 	if asc {
 		order = "ASC"
@@ -162,136 +162,136 @@ func (qb *eventQueryBuilder) OrderById(asc bool) *eventQueryBuilder {
 	return qb
 }
 
-func (qb *eventQueryBuilder) WhereTitle(p mysql.Predicate, value string) *eventQueryBuilder {
+func (qb *personQueryBuilder) WhereUsername(p mysql.Predicate, value string) *personQueryBuilder {
 	qb.where = append(qb.where, struct {
 		prefix string
 		value  interface{}
 	}{
-		fmt.Sprintf("%v %v ?", "title", p),
+		fmt.Sprintf("%v %v ?", "username", p),
 		value,
 	})
 	return qb
 }
 
-func (qb *eventQueryBuilder) WhereTitleIn(value []string) *eventQueryBuilder {
+func (qb *personQueryBuilder) WhereUsernameIn(value []string) *personQueryBuilder {
 	qb.where = append(qb.where, struct {
 		prefix string
 		value  interface{}
 	}{
-		fmt.Sprintf("%v %v ?", "title", "IN"),
+		fmt.Sprintf("%v %v ?", "username", "IN"),
 		value,
 	})
 	return qb
 }
 
-func (qb *eventQueryBuilder) WhereTitleNotIn(value []string) *eventQueryBuilder {
+func (qb *personQueryBuilder) WhereUsernameNotIn(value []string) *personQueryBuilder {
 	qb.where = append(qb.where, struct {
 		prefix string
 		value  interface{}
 	}{
-		fmt.Sprintf("%v %v ?", "title", "NOT IN"),
+		fmt.Sprintf("%v %v ?", "username", "NOT IN"),
 		value,
 	})
 	return qb
 }
 
-func (qb *eventQueryBuilder) OrderByTitle(asc bool) *eventQueryBuilder {
+func (qb *personQueryBuilder) OrderByUsername(asc bool) *personQueryBuilder {
 	order := "DESC"
 	if asc {
 		order = "ASC"
 	}
 
-	qb.order = append(qb.order, "title "+order)
+	qb.order = append(qb.order, "username "+order)
 	return qb
 }
 
-func (qb *eventQueryBuilder) WhereContent(p mysql.Predicate, value string) *eventQueryBuilder {
+func (qb *personQueryBuilder) WhereIntro(p mysql.Predicate, value string) *personQueryBuilder {
 	qb.where = append(qb.where, struct {
 		prefix string
 		value  interface{}
 	}{
-		fmt.Sprintf("%v %v ?", "content", p),
+		fmt.Sprintf("%v %v ?", "intro", p),
 		value,
 	})
 	return qb
 }
 
-func (qb *eventQueryBuilder) WhereContentIn(value []string) *eventQueryBuilder {
+func (qb *personQueryBuilder) WhereIntroIn(value []string) *personQueryBuilder {
 	qb.where = append(qb.where, struct {
 		prefix string
 		value  interface{}
 	}{
-		fmt.Sprintf("%v %v ?", "content", "IN"),
+		fmt.Sprintf("%v %v ?", "intro", "IN"),
 		value,
 	})
 	return qb
 }
 
-func (qb *eventQueryBuilder) WhereContentNotIn(value []string) *eventQueryBuilder {
+func (qb *personQueryBuilder) WhereIntroNotIn(value []string) *personQueryBuilder {
 	qb.where = append(qb.where, struct {
 		prefix string
 		value  interface{}
 	}{
-		fmt.Sprintf("%v %v ?", "content", "NOT IN"),
+		fmt.Sprintf("%v %v ?", "intro", "NOT IN"),
 		value,
 	})
 	return qb
 }
 
-func (qb *eventQueryBuilder) OrderByContent(asc bool) *eventQueryBuilder {
+func (qb *personQueryBuilder) OrderByIntro(asc bool) *personQueryBuilder {
 	order := "DESC"
 	if asc {
 		order = "ASC"
 	}
 
-	qb.order = append(qb.order, "content "+order)
+	qb.order = append(qb.order, "intro "+order)
 	return qb
 }
 
-func (qb *eventQueryBuilder) WhereCover(p mysql.Predicate, value string) *eventQueryBuilder {
+func (qb *personQueryBuilder) WhereIcon(p mysql.Predicate, value string) *personQueryBuilder {
 	qb.where = append(qb.where, struct {
 		prefix string
 		value  interface{}
 	}{
-		fmt.Sprintf("%v %v ?", "cover", p),
+		fmt.Sprintf("%v %v ?", "icon", p),
 		value,
 	})
 	return qb
 }
 
-func (qb *eventQueryBuilder) WhereCoverIn(value []string) *eventQueryBuilder {
+func (qb *personQueryBuilder) WhereIconIn(value []string) *personQueryBuilder {
 	qb.where = append(qb.where, struct {
 		prefix string
 		value  interface{}
 	}{
-		fmt.Sprintf("%v %v ?", "cover", "IN"),
+		fmt.Sprintf("%v %v ?", "icon", "IN"),
 		value,
 	})
 	return qb
 }
 
-func (qb *eventQueryBuilder) WhereCoverNotIn(value []string) *eventQueryBuilder {
+func (qb *personQueryBuilder) WhereIconNotIn(value []string) *personQueryBuilder {
 	qb.where = append(qb.where, struct {
 		prefix string
 		value  interface{}
 	}{
-		fmt.Sprintf("%v %v ?", "cover", "NOT IN"),
+		fmt.Sprintf("%v %v ?", "icon", "NOT IN"),
 		value,
 	})
 	return qb
 }
 
-func (qb *eventQueryBuilder) OrderByCover(asc bool) *eventQueryBuilder {
+func (qb *personQueryBuilder) OrderByIcon(asc bool) *personQueryBuilder {
 	order := "DESC"
 	if asc {
 		order = "ASC"
 	}
 
-	qb.order = append(qb.order, "cover "+order)
+	qb.order = append(qb.order, "icon "+order)
 	return qb
 }
 
-func (qb *eventQueryBuilder) WhereIsDeleted(p mysql.Predicate, value int32) *eventQueryBuilder {
+func (qb *personQueryBuilder) WhereIsDeleted(p mysql.Predicate, value int32) *personQueryBuilder {
 	qb.where = append(qb.where, struct {
 		prefix string
 		value  interface{}
@@ -302,7 +302,7 @@ func (qb *eventQueryBuilder) WhereIsDeleted(p mysql.Predicate, value int32) *eve
 	return qb
 }
 
-func (qb *eventQueryBuilder) WhereIsDeletedIn(value []int32) *eventQueryBuilder {
+func (qb *personQueryBuilder) WhereIsDeletedIn(value []int32) *personQueryBuilder {
 	qb.where = append(qb.where, struct {
 		prefix string
 		value  interface{}
@@ -313,7 +313,7 @@ func (qb *eventQueryBuilder) WhereIsDeletedIn(value []int32) *eventQueryBuilder 
 	return qb
 }
 
-func (qb *eventQueryBuilder) WhereIsDeletedNotIn(value []int32) *eventQueryBuilder {
+func (qb *personQueryBuilder) WhereIsDeletedNotIn(value []int32) *personQueryBuilder {
 	qb.where = append(qb.where, struct {
 		prefix string
 		value  interface{}
@@ -324,7 +324,7 @@ func (qb *eventQueryBuilder) WhereIsDeletedNotIn(value []int32) *eventQueryBuild
 	return qb
 }
 
-func (qb *eventQueryBuilder) OrderByIsDeleted(asc bool) *eventQueryBuilder {
+func (qb *personQueryBuilder) OrderByIsDeleted(asc bool) *personQueryBuilder {
 	order := "DESC"
 	if asc {
 		order = "ASC"
@@ -334,7 +334,7 @@ func (qb *eventQueryBuilder) OrderByIsDeleted(asc bool) *eventQueryBuilder {
 	return qb
 }
 
-func (qb *eventQueryBuilder) WhereCreatedAt(p mysql.Predicate, value time.Time) *eventQueryBuilder {
+func (qb *personQueryBuilder) WhereCreatedAt(p mysql.Predicate, value time.Time) *personQueryBuilder {
 	qb.where = append(qb.where, struct {
 		prefix string
 		value  interface{}
@@ -345,7 +345,7 @@ func (qb *eventQueryBuilder) WhereCreatedAt(p mysql.Predicate, value time.Time) 
 	return qb
 }
 
-func (qb *eventQueryBuilder) WhereCreatedAtIn(value []time.Time) *eventQueryBuilder {
+func (qb *personQueryBuilder) WhereCreatedAtIn(value []time.Time) *personQueryBuilder {
 	qb.where = append(qb.where, struct {
 		prefix string
 		value  interface{}
@@ -356,7 +356,7 @@ func (qb *eventQueryBuilder) WhereCreatedAtIn(value []time.Time) *eventQueryBuil
 	return qb
 }
 
-func (qb *eventQueryBuilder) WhereCreatedAtNotIn(value []time.Time) *eventQueryBuilder {
+func (qb *personQueryBuilder) WhereCreatedAtNotIn(value []time.Time) *personQueryBuilder {
 	qb.where = append(qb.where, struct {
 		prefix string
 		value  interface{}
@@ -367,7 +367,7 @@ func (qb *eventQueryBuilder) WhereCreatedAtNotIn(value []time.Time) *eventQueryB
 	return qb
 }
 
-func (qb *eventQueryBuilder) OrderByCreatedAt(asc bool) *eventQueryBuilder {
+func (qb *personQueryBuilder) OrderByCreatedAt(asc bool) *personQueryBuilder {
 	order := "DESC"
 	if asc {
 		order = "ASC"
@@ -377,7 +377,7 @@ func (qb *eventQueryBuilder) OrderByCreatedAt(asc bool) *eventQueryBuilder {
 	return qb
 }
 
-func (qb *eventQueryBuilder) WhereCreatedUser(p mysql.Predicate, value string) *eventQueryBuilder {
+func (qb *personQueryBuilder) WhereCreatedUser(p mysql.Predicate, value string) *personQueryBuilder {
 	qb.where = append(qb.where, struct {
 		prefix string
 		value  interface{}
@@ -388,7 +388,7 @@ func (qb *eventQueryBuilder) WhereCreatedUser(p mysql.Predicate, value string) *
 	return qb
 }
 
-func (qb *eventQueryBuilder) WhereCreatedUserIn(value []string) *eventQueryBuilder {
+func (qb *personQueryBuilder) WhereCreatedUserIn(value []string) *personQueryBuilder {
 	qb.where = append(qb.where, struct {
 		prefix string
 		value  interface{}
@@ -399,7 +399,7 @@ func (qb *eventQueryBuilder) WhereCreatedUserIn(value []string) *eventQueryBuild
 	return qb
 }
 
-func (qb *eventQueryBuilder) WhereCreatedUserNotIn(value []string) *eventQueryBuilder {
+func (qb *personQueryBuilder) WhereCreatedUserNotIn(value []string) *personQueryBuilder {
 	qb.where = append(qb.where, struct {
 		prefix string
 		value  interface{}
@@ -410,7 +410,7 @@ func (qb *eventQueryBuilder) WhereCreatedUserNotIn(value []string) *eventQueryBu
 	return qb
 }
 
-func (qb *eventQueryBuilder) OrderByCreatedUser(asc bool) *eventQueryBuilder {
+func (qb *personQueryBuilder) OrderByCreatedUser(asc bool) *personQueryBuilder {
 	order := "DESC"
 	if asc {
 		order = "ASC"
@@ -420,7 +420,7 @@ func (qb *eventQueryBuilder) OrderByCreatedUser(asc bool) *eventQueryBuilder {
 	return qb
 }
 
-func (qb *eventQueryBuilder) WhereUpdatedAt(p mysql.Predicate, value time.Time) *eventQueryBuilder {
+func (qb *personQueryBuilder) WhereUpdatedAt(p mysql.Predicate, value time.Time) *personQueryBuilder {
 	qb.where = append(qb.where, struct {
 		prefix string
 		value  interface{}
@@ -431,7 +431,7 @@ func (qb *eventQueryBuilder) WhereUpdatedAt(p mysql.Predicate, value time.Time) 
 	return qb
 }
 
-func (qb *eventQueryBuilder) WhereUpdatedAtIn(value []time.Time) *eventQueryBuilder {
+func (qb *personQueryBuilder) WhereUpdatedAtIn(value []time.Time) *personQueryBuilder {
 	qb.where = append(qb.where, struct {
 		prefix string
 		value  interface{}
@@ -442,7 +442,7 @@ func (qb *eventQueryBuilder) WhereUpdatedAtIn(value []time.Time) *eventQueryBuil
 	return qb
 }
 
-func (qb *eventQueryBuilder) WhereUpdatedAtNotIn(value []time.Time) *eventQueryBuilder {
+func (qb *personQueryBuilder) WhereUpdatedAtNotIn(value []time.Time) *personQueryBuilder {
 	qb.where = append(qb.where, struct {
 		prefix string
 		value  interface{}
@@ -453,7 +453,7 @@ func (qb *eventQueryBuilder) WhereUpdatedAtNotIn(value []time.Time) *eventQueryB
 	return qb
 }
 
-func (qb *eventQueryBuilder) OrderByUpdatedAt(asc bool) *eventQueryBuilder {
+func (qb *personQueryBuilder) OrderByUpdatedAt(asc bool) *personQueryBuilder {
 	order := "DESC"
 	if asc {
 		order = "ASC"
@@ -463,7 +463,7 @@ func (qb *eventQueryBuilder) OrderByUpdatedAt(asc bool) *eventQueryBuilder {
 	return qb
 }
 
-func (qb *eventQueryBuilder) WhereUpdatedUser(p mysql.Predicate, value string) *eventQueryBuilder {
+func (qb *personQueryBuilder) WhereUpdatedUser(p mysql.Predicate, value string) *personQueryBuilder {
 	qb.where = append(qb.where, struct {
 		prefix string
 		value  interface{}
@@ -474,7 +474,7 @@ func (qb *eventQueryBuilder) WhereUpdatedUser(p mysql.Predicate, value string) *
 	return qb
 }
 
-func (qb *eventQueryBuilder) WhereUpdatedUserIn(value []string) *eventQueryBuilder {
+func (qb *personQueryBuilder) WhereUpdatedUserIn(value []string) *personQueryBuilder {
 	qb.where = append(qb.where, struct {
 		prefix string
 		value  interface{}
@@ -485,7 +485,7 @@ func (qb *eventQueryBuilder) WhereUpdatedUserIn(value []string) *eventQueryBuild
 	return qb
 }
 
-func (qb *eventQueryBuilder) WhereUpdatedUserNotIn(value []string) *eventQueryBuilder {
+func (qb *personQueryBuilder) WhereUpdatedUserNotIn(value []string) *personQueryBuilder {
 	qb.where = append(qb.where, struct {
 		prefix string
 		value  interface{}
@@ -496,7 +496,7 @@ func (qb *eventQueryBuilder) WhereUpdatedUserNotIn(value []string) *eventQueryBu
 	return qb
 }
 
-func (qb *eventQueryBuilder) OrderByUpdatedUser(asc bool) *eventQueryBuilder {
+func (qb *personQueryBuilder) OrderByUpdatedUser(asc bool) *personQueryBuilder {
 	order := "DESC"
 	if asc {
 		order = "ASC"
