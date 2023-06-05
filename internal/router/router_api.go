@@ -9,6 +9,7 @@ import (
 	"github.com/xinliangnote/go-gin-api/internal/api/helper"
 	"github.com/xinliangnote/go-gin-api/internal/api/menu"
 	"github.com/xinliangnote/go-gin-api/internal/api/order"
+	"github.com/xinliangnote/go-gin-api/internal/api/person"
 	"github.com/xinliangnote/go-gin-api/internal/api/tool"
 	"github.com/xinliangnote/go-gin-api/internal/pkg/core"
 )
@@ -33,7 +34,12 @@ func setApiRouter(r *resource) {
 		//event
 		eventHandler := event.New(r.logger, r.db, r.cache)
 		login.GET("/event", eventHandler.List())
-		login.GET("/event:id", eventHandler.Detail())
+		login.GET("/event/:id", eventHandler.Detail())
+
+		//person
+		personHandler := person.New(r.logger, r.db, r.cache)
+		login.GET("/person", personHandler.List())
+		login.GET("/person/:id", personHandler.Detail())
 	}
 
 	// 需要签名验证、登录验证，无需 RBAC 权限验证

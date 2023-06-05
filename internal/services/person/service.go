@@ -1,9 +1,9 @@
-package event
+package person
 
 import (
 	"github.com/xinliangnote/go-gin-api/internal/pkg/core"
 	"github.com/xinliangnote/go-gin-api/internal/repository/mysql"
-	"github.com/xinliangnote/go-gin-api/internal/repository/mysql/event"
+	"github.com/xinliangnote/go-gin-api/internal/repository/mysql/person"
 	"github.com/xinliangnote/go-gin-api/internal/repository/redis"
 )
 
@@ -12,8 +12,8 @@ var _ Service = (*service)(nil)
 type Service interface {
 	i()
 
-	List(ctx core.Context, eventData *EventData) (listData []*event.Event, err error)
-	Detail(ctx core.Context, eventParams *EventParams) (eventData *event.Event, err error)
+	List(ctx core.Context) (listData []*person.Person, err error)
+	Detail(ctx core.Context, personParams *PersonParams) (personData *person.Person, err error)
 }
 
 type service struct {

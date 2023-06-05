@@ -1,4 +1,4 @@
-package event
+package person
 
 import (
 	"net/http"
@@ -7,7 +7,7 @@ import (
 
 	"github.com/xinliangnote/go-gin-api/internal/code"
 	"github.com/xinliangnote/go-gin-api/internal/pkg/core"
-	"github.com/xinliangnote/go-gin-api/internal/services/event"
+	"github.com/xinliangnote/go-gin-api/internal/services/person"
 )
 
 type detailRequest struct {
@@ -16,16 +16,16 @@ type detailRequest struct {
 
 type detailResponse struct {
 	Id         int32     `json:"id"`         // ID
-	Title      string    `json:"title"`      // title
-	Content    string    `json:"content"`    // content
-	Cover      string    `json:"cover"`      // cover
+	Username   string    `json:"username"`   // username
+	Intro      string    `json:"intro"`      // intro
+	Icon       string    `json:"icon"`       // icon
 	Created_at time.Time `json:"created_at"` // create time
 	Updated_at time.Time `json:"updated_at"` // update time
 }
 
-// Detail 事件
-// @Summary 事件
-// @Description 事件
+// Detail 事件详情
+// @Summary 事件详情
+// @Description 事件详情
 // @Tags API.event
 // @Accept application/x-www-form-urlencoded
 // @Produce json
@@ -46,10 +46,10 @@ func (h *handler) Detail() core.HandlerFunc {
 		}
 		id, err := strconv.ParseInt(req.Id, 10, 32)
 
-		eventParams := new(event.EventParams)
-		eventParams.Id = int32(id)
+		personParams := new(person.PersonParams)
+		personParams.Id = int32(id)
 
-		data, err := h.eventService.Detail(c, eventParams)
+		data, err := h.personService.Detail(c, personParams)
 
 		if err != nil {
 			c.AbortWithError(core.Error(
@@ -61,9 +61,9 @@ func (h *handler) Detail() core.HandlerFunc {
 		}
 		res := &detailResponse{
 			Id:         data.Id,
-			Title:      data.Title,
-			Content:    data.Content,
-			Cover:      data.Cover,
+			Username:   data.Username,
+			Intro:      data.Intro,
+			Icon:       data.Icon,
 			Created_at: data.CreatedAt,
 			Updated_at: data.UpdatedAt,
 		}
@@ -71,5 +71,6 @@ func (h *handler) Detail() core.HandlerFunc {
 			http.StatusOK,
 			"Success",
 			res))
+
 	}
 }

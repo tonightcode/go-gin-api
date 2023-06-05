@@ -403,3 +403,17 @@ func (c *context) RequestContext() StdContext {
 func (c *context) ResponseWriter() gin.ResponseWriter {
 	return c.ctx.Writer
 }
+
+type Success struct {
+	Code    int         `json:"code"`
+	Message string      `json:"message"`
+	Data    interface{} `json:"data"`
+}
+
+func ApiSuccess(httpCode int, message string, data interface{}) Success {
+	return Success{
+		Code:    httpCode,
+		Message: message,
+		Data:    data,
+	}
+}
