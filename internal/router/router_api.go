@@ -31,15 +31,6 @@ func setApiRouter(r *resource) {
 	login := r.mux.Group("/api", r.interceptors.CheckSignature())
 	{
 		login.POST("/login", adminHandler.Login())
-		//event
-		eventHandler := event.New(r.logger, r.db, r.cache)
-		login.GET("/event", eventHandler.List())
-		login.GET("/event/:id", eventHandler.Detail())
-
-		//person
-		personHandler := person.New(r.logger, r.db, r.cache)
-		login.GET("/person", personHandler.List())
-		login.GET("/person/:id", personHandler.Detail())
 	}
 
 	// 需要签名验证、登录验证，无需 RBAC 权限验证
@@ -117,5 +108,14 @@ func setApiRouter(r *resource) {
 		api.POST("/order/cancel", orderHandler.Cancel())
 		api.GET("/order:id", orderHandler.Detail())
 
+		//event
+		eventHandler := event.New(r.logger, r.db, r.cache)
+		login.GET("/event", eventHandler.List())
+		login.GET("/event/:id", eventHandler.Detail())
+
+		//person
+		personHandler := person.New(r.logger, r.db, r.cache)
+		login.GET("/person", personHandler.List())
+		login.GET("/person/:id", personHandler.Detail())
 	}
 }
