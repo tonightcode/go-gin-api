@@ -44,7 +44,7 @@ func (h *handler) Detail() core.HandlerFunc {
 			)
 			return
 		}
-		id, err := strconv.ParseInt(req.Id, 10, 32)
+		id, _ := strconv.ParseInt(req.Id, 10, 32)
 
 		eventParams := new(event.EventParams)
 		eventParams.Id = int32(id)

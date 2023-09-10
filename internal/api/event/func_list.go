@@ -2,6 +2,7 @@ package event
 
 import (
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/xinliangnote/go-gin-api/internal/code"
@@ -10,17 +11,19 @@ import (
 )
 
 type listData struct {
-	Id         int32     `json:"id"`         // ID
-	Title      string    `json:"title"`      // title
-	Content    string    `json:"content"`    // content
-	Cover      string    `json:"cover"`      // cover
-	Created_at time.Time `json:"created_at"` // create time
-	Updated_at time.Time `json:"updated_at"` // update time
+	Id         int32  `json:"id"`         // ID
+	Title      string `json:"title"`      // title
+	Content    string `json:"content"`    // content
+	Cover      string `json:"cover"`      // cover
+	Happend_at string `json:"happend_at"` // cover
+	Created_at string `json:"created_at"` // create time
+	Updated_at string `json:"updated_at"` // update time
 }
-type listRequest struct{}
 
 type listResponse struct {
-	List []listData `json:"list"`
+	Total int64      `json:"total"`
+	Page  int        `json:"page"`
+	List  []listData `json:"list"`
 }
 
 // List 事件列表
@@ -35,8 +38,26 @@ type listResponse struct {
 // @Router /api/event [get]
 func (h *handler) List() core.HandlerFunc {
 	return func(c core.Context) {
-		res := new(listResponse)
-		resListData, err := h.eventService.List(c, new(event.EventData))
+		title := c.Query("title")
+		happend_at := c.Query("happend_at")
+		page_str := c.Query("page")
+		limit_str := c.Query("limit")
+		eventData := event.EventData{
+			Title:      title,
+			Happend_at: happend_at,
+		}
+		if page_str == "" {
+			eventData.Page = 1
+		} else {
+			eventData.Page, _ = strconv.Atoi(page_str)
+		}
+		if limit_str == "" {
+			eventData.Limit = 10
+		} else {
+			eventData.Limit, _ = strconv.Atoi(limit_str)
+		}
+		total, _ := h.eventService.Total(c, &eventData)
+		list, err := h.eventService.List(c, &eventData)
 		if err != nil {
 			c.AbortWithError(core.Error(
 				http.StatusBadRequest,
@@ -45,15 +66,20 @@ func (h *handler) List() core.HandlerFunc {
 			)
 			return
 		}
-		res.List = make([]listData, len(resListData))
-		for k, v := range resListData {
+		res := new(listResponse)
+		res.Page = eventData.Page
+		res.Total = total
+		res.List = make([]listData, len(list))
+		for k, v := range list {
+			t, _ := time.Parse("2006-01-02T15:04:05-07:00", v.HappendAt)
 			data := listData{
 				Id:         v.Id,
 				Title:      v.Title,
 				Content:    v.Content,
 				Cover:      v.Cover,
-				Created_at: v.CreatedAt,
-				Updated_at: v.UpdatedAt,
+				Happend_at: t.Format("2006-01-02"),
+				Created_at: v.CreatedAt.Format("2006-01-02 15:04:05"),
+				Updated_at: v.UpdatedAt.Format("2006-01-02 15:04:05"),
 			}
 
 			res.List[k] = data

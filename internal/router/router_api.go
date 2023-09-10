@@ -107,15 +107,19 @@ func setApiRouter(r *resource) {
 		api.POST("/order/create", orderHandler.Create())
 		api.POST("/order/cancel", orderHandler.Cancel())
 		api.GET("/order:id", orderHandler.Detail())
+	}
 
+	// 不需要签名验证、不登录验证、不需要RBAC 权限验证
+	font_api := r.mux.Group("/api")
+	{
 		//event
 		eventHandler := event.New(r.logger, r.db, r.cache)
-		login.GET("/event", eventHandler.List())
-		login.GET("/event/:id", eventHandler.Detail())
+		font_api.GET("/event", eventHandler.List())
+		font_api.GET("/event/:id", eventHandler.Detail())
 
 		//person
 		personHandler := person.New(r.logger, r.db, r.cache)
-		login.GET("/person", personHandler.List())
-		login.GET("/person/:id", personHandler.Detail())
+		font_api.GET("/person", personHandler.List())
+		font_api.GET("/person/:id", personHandler.Detail())
 	}
 }

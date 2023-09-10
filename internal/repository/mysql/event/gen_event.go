@@ -291,6 +291,49 @@ func (qb *eventQueryBuilder) OrderByCover(asc bool) *eventQueryBuilder {
 	return qb
 }
 
+func (qb *eventQueryBuilder) WhereHappendAt(p mysql.Predicate, value string) *eventQueryBuilder {
+	qb.where = append(qb.where, struct {
+		prefix string
+		value  interface{}
+	}{
+		fmt.Sprintf("%v %v ?", "happend_at", p),
+		value,
+	})
+	return qb
+}
+
+func (qb *eventQueryBuilder) WhereHappendAtIn(value []string) *eventQueryBuilder {
+	qb.where = append(qb.where, struct {
+		prefix string
+		value  interface{}
+	}{
+		fmt.Sprintf("%v %v ?", "happend_at", "IN"),
+		value,
+	})
+	return qb
+}
+
+func (qb *eventQueryBuilder) WhereHappendAtNotIn(value []string) *eventQueryBuilder {
+	qb.where = append(qb.where, struct {
+		prefix string
+		value  interface{}
+	}{
+		fmt.Sprintf("%v %v ?", "happend_at", "NOT IN"),
+		value,
+	})
+	return qb
+}
+
+func (qb *eventQueryBuilder) OrderByHappendAt(asc bool) *eventQueryBuilder {
+	order := "DESC"
+	if asc {
+		order = "ASC"
+	}
+
+	qb.order = append(qb.order, "happend_at "+order)
+	return qb
+}
+
 func (qb *eventQueryBuilder) WhereIsDeleted(p mysql.Predicate, value int32) *eventQueryBuilder {
 	qb.where = append(qb.where, struct {
 		prefix string

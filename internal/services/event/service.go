@@ -13,6 +13,7 @@ type Service interface {
 	i()
 
 	List(ctx core.Context, eventData *EventData) (listData []*event.Event, err error)
+	Total(ctx core.Context, eventData *EventData) (total int64, err error)
 	Detail(ctx core.Context, eventParams *EventParams) (eventData *event.Event, err error)
 }
 

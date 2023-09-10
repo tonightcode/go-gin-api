@@ -10,6 +10,7 @@ type Event struct {
 	Title       string    // 标题
 	Content     string    // 详情
 	Cover       string    // 封面
+	HappendAt   string    // 发生时间
 	IsDeleted   int32     // 是否删除 1:是  -1:否
 	CreatedAt   time.Time `gorm:"time"` // 创建时间
 	CreatedUser string    // 创建人

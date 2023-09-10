@@ -145,6 +145,8 @@ type Context interface {
 
 	// ResponseWriter 获取 ResponseWriter 对象
 	ResponseWriter() gin.ResponseWriter
+
+	Query(Key string) string
 }
 
 type context struct {
@@ -402,6 +404,10 @@ func (c *context) RequestContext() StdContext {
 // ResponseWriter 获取 ResponseWriter
 func (c *context) ResponseWriter() gin.ResponseWriter {
 	return c.ctx.Writer
+}
+
+func (c *context) Query(Key string) string {
+	return c.ctx.Query(Key)
 }
 
 type Success struct {
