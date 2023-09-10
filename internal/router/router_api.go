@@ -10,6 +10,7 @@ import (
 	"github.com/xinliangnote/go-gin-api/internal/api/menu"
 	"github.com/xinliangnote/go-gin-api/internal/api/order"
 	"github.com/xinliangnote/go-gin-api/internal/api/person"
+	"github.com/xinliangnote/go-gin-api/internal/api/place"
 	"github.com/xinliangnote/go-gin-api/internal/api/tool"
 	"github.com/xinliangnote/go-gin-api/internal/pkg/core"
 )
@@ -121,5 +122,10 @@ func setApiRouter(r *resource) {
 		personHandler := person.New(r.logger, r.db, r.cache)
 		font_api.GET("/person", personHandler.List())
 		font_api.GET("/person/:id", personHandler.Detail())
+
+		//place
+		placeHandler := place.New(r.logger, r.db, r.cache)
+		font_api.GET("/place", placeHandler.List())
+		font_api.GET("/place/:id", placeHandler.Detail())
 	}
 }
