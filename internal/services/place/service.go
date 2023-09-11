@@ -3,7 +3,7 @@ package place
 import (
 	"github.com/xinliangnote/go-gin-api/internal/pkg/core"
 	"github.com/xinliangnote/go-gin-api/internal/repository/mysql"
-	"github.com/xinliangnote/go-gin-api/internal/repository/mysql/place"
+	entity "github.com/xinliangnote/go-gin-api/internal/repository/mysql/place"
 	"github.com/xinliangnote/go-gin-api/internal/repository/redis"
 )
 
@@ -12,8 +12,8 @@ var _ Service = (*service)(nil)
 type Service interface {
 	i()
 
-	List(ctx core.Context, placeData *PlaceData) (listData []*place.Place, err error)
-	Detail(ctx core.Context, placeParams *PlaceParams) (eventData *place.Place, err error)
+	List(ctx core.Context, where *Where) (list []*entity.Place, err error)
+	Detail(ctx core.Context, where *Where) (data *entity.Place, err error)
 }
 
 type service struct {

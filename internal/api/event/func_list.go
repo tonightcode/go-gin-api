@@ -7,7 +7,7 @@ import (
 
 	"github.com/xinliangnote/go-gin-api/internal/code"
 	"github.com/xinliangnote/go-gin-api/internal/pkg/core"
-	"github.com/xinliangnote/go-gin-api/internal/services/event"
+	service "github.com/xinliangnote/go-gin-api/internal/services/event"
 )
 
 type listData struct {
@@ -42,22 +42,22 @@ func (h *handler) List() core.HandlerFunc {
 		happend_at := c.Query("happend_at")
 		page_str := c.Query("page")
 		limit_str := c.Query("limit")
-		eventData := event.EventData{
+		where := service.Where{
 			Title:      title,
 			Happend_at: happend_at,
 		}
 		if page_str == "" {
-			eventData.Page = 1
+			where.Page = 1
 		} else {
-			eventData.Page, _ = strconv.Atoi(page_str)
+			where.Page, _ = strconv.Atoi(page_str)
 		}
 		if limit_str == "" {
-			eventData.Limit = 10
+			where.Limit = 10
 		} else {
-			eventData.Limit, _ = strconv.Atoi(limit_str)
+			where.Limit, _ = strconv.Atoi(limit_str)
 		}
-		total, _ := h.eventService.Total(c, &eventData)
-		list, err := h.eventService.List(c, &eventData)
+		total, _ := h.eventService.Total(c, &where)
+		list, err := h.eventService.List(c, &where)
 		if err != nil {
 			c.AbortWithError(core.Error(
 				http.StatusBadRequest,
@@ -67,7 +67,7 @@ func (h *handler) List() core.HandlerFunc {
 			return
 		}
 		res := new(listResponse)
-		res.Page = eventData.Page
+		res.Page = where.Page
 		res.Total = total
 		res.List = make([]listData, len(list))
 		for k, v := range list {

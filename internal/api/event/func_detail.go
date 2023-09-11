@@ -7,7 +7,7 @@ import (
 
 	"github.com/xinliangnote/go-gin-api/internal/code"
 	"github.com/xinliangnote/go-gin-api/internal/pkg/core"
-	"github.com/xinliangnote/go-gin-api/internal/services/event"
+	service "github.com/xinliangnote/go-gin-api/internal/services/event"
 )
 
 type detailRequest struct {
@@ -46,10 +46,10 @@ func (h *handler) Detail() core.HandlerFunc {
 		}
 		id, _ := strconv.ParseInt(req.Id, 10, 32)
 
-		eventParams := new(event.EventParams)
-		eventParams.Id = int32(id)
+		where := new(service.Where)
+		where.Id = int32(id)
 
-		data, err := h.eventService.Detail(c, eventParams)
+		data, err := h.eventService.Detail(c, where)
 
 		if err != nil {
 			c.AbortWithError(core.Error(

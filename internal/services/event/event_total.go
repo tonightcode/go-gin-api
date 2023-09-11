@@ -3,17 +3,17 @@ package event
 import (
 	"github.com/xinliangnote/go-gin-api/internal/pkg/core"
 	"github.com/xinliangnote/go-gin-api/internal/repository/mysql"
-	"github.com/xinliangnote/go-gin-api/internal/repository/mysql/event"
+	entity "github.com/xinliangnote/go-gin-api/internal/repository/mysql/event"
 )
 
-func (s *service) Total(ctx core.Context, eventData *EventData) (total int64, err error) {
+func (s *service) Total(ctx core.Context, where *Where) (total int64, err error) {
 
-	qb := event.NewQueryBuilder()
-	if eventData.Title != "" {
-		qb.WhereTitle(mysql.LikePredicate, "%"+eventData.Title+"%")
+	qb := entity.NewQueryBuilder()
+	if where.Title != "" {
+		qb.WhereTitle(mysql.LikePredicate, "%"+where.Title+"%")
 	}
-	if eventData.Happend_at != "" {
-		qb.WhereHappendAt(mysql.EqualPredicate, eventData.Happend_at)
+	if where.Happend_at != "" {
+		qb.WhereHappendAt(mysql.EqualPredicate, where.Happend_at)
 	}
 	qb.WhereIsDeleted(mysql.EqualPredicate, -1)
 

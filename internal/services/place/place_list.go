@@ -3,30 +3,31 @@ package place
 import (
 	"github.com/xinliangnote/go-gin-api/internal/pkg/core"
 	"github.com/xinliangnote/go-gin-api/internal/repository/mysql"
-	"github.com/xinliangnote/go-gin-api/internal/repository/mysql/place"
+	entity "github.com/xinliangnote/go-gin-api/internal/repository/mysql/place"
 )
 
-type PlaceData struct {
+type Where struct {
+	Id      int32
 	Name    string
 	Content string
 	Page    int
 	Limit   int
 }
 
-func (s *service) List(ctx core.Context, placeData *PlaceData) (listData []*place.Place, err error) {
+func (s *service) List(ctx core.Context, where *Where) (list []*entity.Place, err error) {
 
-	qb := place.NewQueryBuilder()
-	if placeData.Name != "" {
-		qb.WhereName(mysql.LikePredicate, "%"+placeData.Name+"%")
+	qb := entity.NewQueryBuilder()
+	if where.Name != "" {
+		qb.WhereName(mysql.LikePredicate, "%"+where.Name+"%")
 	}
-	if placeData.Content != "" {
-		qb.WhereContent(mysql.LikePredicate, "%"+placeData.Content+"%")
+	if where.Content != "" {
+		qb.WhereContent(mysql.LikePredicate, "%"+where.Content+"%")
 	}
 	qb.WhereIsDeleted(mysql.EqualPredicate, -1)
-	qb.Offset((placeData.Page - 1) * placeData.Limit)
-	qb.Limit(placeData.Limit)
+	qb.Offset((where.Page - 1) * where.Limit)
+	qb.Limit(where.Limit)
 
-	listData, err = qb.
+	list, err = qb.
 		QueryAll(s.db.GetDbR().WithContext(ctx.RequestContext()))
 	if err != nil {
 		return nil, err

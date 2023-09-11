@@ -6,13 +6,8 @@ import (
 
 	"github.com/xinliangnote/go-gin-api/internal/code"
 	"github.com/xinliangnote/go-gin-api/internal/pkg/core"
-	"github.com/xinliangnote/go-gin-api/internal/services/place"
+	service "github.com/xinliangnote/go-gin-api/internal/services/place"
 )
-
-type listRequest struct {
-	name    string
-	content string
-}
 
 type listData struct {
 	Id         int32  `json:"id"`         // ID
@@ -49,21 +44,21 @@ func (h *handler) List() core.HandlerFunc {
 		content := c.Query("content")
 		page_str := c.Query("page")
 		limit_str := c.Query("limit")
-		placeData := place.PlaceData{
+		where := service.Where{
 			Name:    name,
 			Content: content,
 		}
 		if page_str == "" {
-			placeData.Page = 1
+			where.Page = 1
 		} else {
-			placeData.Page, _ = strconv.Atoi(page_str)
+			where.Page, _ = strconv.Atoi(page_str)
 		}
 		if limit_str == "" {
-			placeData.Limit = 10
+			where.Limit = 10
 		} else {
-			placeData.Limit, _ = strconv.Atoi(limit_str)
+			where.Limit, _ = strconv.Atoi(limit_str)
 		}
-		list, err := h.placeService.List(c, &placeData)
+		list, err := h.placeService.List(c, &where)
 		if err != nil {
 			c.AbortWithError(core.Error(
 				http.StatusBadRequest,
@@ -73,7 +68,7 @@ func (h *handler) List() core.HandlerFunc {
 			return
 		}
 		res := new(listResponse)
-		res.Page = placeData.Page
+		res.Page = where.Page
 		res.Total = 0
 		res.List = make([]listData, len(list))
 		for k, v := range list {
