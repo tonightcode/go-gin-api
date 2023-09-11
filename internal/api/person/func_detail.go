@@ -7,7 +7,7 @@ import (
 
 	"github.com/xinliangnote/go-gin-api/internal/code"
 	"github.com/xinliangnote/go-gin-api/internal/pkg/core"
-	"github.com/xinliangnote/go-gin-api/internal/services/person"
+	service "github.com/xinliangnote/go-gin-api/internal/services/person"
 )
 
 type detailRequest struct {
@@ -44,12 +44,12 @@ func (h *handler) Detail() core.HandlerFunc {
 			)
 			return
 		}
-		id, err := strconv.ParseInt(req.Id, 10, 32)
+		id, _ := strconv.ParseInt(req.Id, 10, 32)
 
-		personParams := new(person.PersonParams)
-		personParams.Id = int32(id)
+		where := new(service.Where)
+		where.Id = int32(id)
 
-		data, err := h.personService.Detail(c, personParams)
+		data, err := h.service.Detail(c, where)
 
 		if err != nil {
 			c.AbortWithError(core.Error(

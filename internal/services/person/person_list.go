@@ -3,13 +3,25 @@ package person
 import (
 	"github.com/xinliangnote/go-gin-api/internal/pkg/core"
 	"github.com/xinliangnote/go-gin-api/internal/repository/mysql"
-	"github.com/xinliangnote/go-gin-api/internal/repository/mysql/person"
+	entity "github.com/xinliangnote/go-gin-api/internal/repository/mysql/person"
 )
 
-func (s *service) List(ctx core.Context) (listData []*person.Person, err error) {
+type Where struct {
+	Id       int32
+	Username string
+	Page     int
+	Limit    int
+}
 
-	qb := person.NewQueryBuilder()
+func (s *service) List(ctx core.Context, where *Where) (listData []*entity.Person, err error) {
+
+	qb := entity.NewQueryBuilder()
+	if where.Username != "" {
+		qb.WhereUsername(mysql.LikePredicate, "%"+where.Username+"%")
+	}
 	qb.WhereIsDeleted(mysql.EqualPredicate, -1)
+	qb.Offset((where.Page - 1) * where.Limit)
+	qb.Limit(where.Limit)
 
 	listData, err = qb.
 		QueryAll(s.db.GetDbR().WithContext(ctx.RequestContext()))

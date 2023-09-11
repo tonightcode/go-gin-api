@@ -2,10 +2,11 @@ package person
 
 import (
 	"net/http"
+	"strconv"
 	"time"
 
-	"github.com/xinliangnote/go-gin-api/internal/code"
 	"github.com/xinliangnote/go-gin-api/internal/pkg/core"
+	service "github.com/xinliangnote/go-gin-api/internal/services/person"
 )
 
 type listData struct {
@@ -16,8 +17,6 @@ type listData struct {
 	Created_at time.Time `json:"created_at"` // create time
 	Updated_at time.Time `json:"updated_at"` // update time
 }
-
-type listRequest struct{}
 
 type listResponse struct {
 	List []listData `json:"list"`
@@ -35,18 +34,26 @@ type listResponse struct {
 // @Router /api/person [get]
 func (h *handler) List() core.HandlerFunc {
 	return func(c core.Context) {
-		res := new(listResponse)
-		resListData, err := h.personService.List(c)
-		if err != nil {
-			c.AbortWithError(core.Error(
-				http.StatusBadRequest,
-				code.MenuListError,
-				code.Text(code.MenuListError)).WithError(err),
-			)
-			return
+		username := c.Query("username")
+		page_str := c.Query("page")
+		limit_str := c.Query("limit")
+		where := service.Where{
+			Username: username,
 		}
-		res.List = make([]listData, len(resListData))
-		for k, v := range resListData {
+		if page_str == "" {
+			where.Page = 1
+		} else {
+			where.Page, _ = strconv.Atoi(page_str)
+		}
+		if limit_str == "" {
+			where.Limit = 10
+		} else {
+			where.Limit, _ = strconv.Atoi(limit_str)
+		}
+		list, _ := h.service.List(c, &where)
+		res := new(listResponse)
+		res.List = make([]listData, len(list))
+		for k, v := range list {
 			data := listData{
 				Id:         v.Id,
 				Username:   v.Username,
