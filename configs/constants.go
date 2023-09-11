@@ -56,4 +56,7 @@ const (
 
 	// LoginSessionTTL 登录有效期为 24 小时
 	LoginSessionTTL = time.Hour * 24
+
+	// Api limit
+	ApiLimit = 20
 )

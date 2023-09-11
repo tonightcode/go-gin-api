@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/xinliangnote/go-gin-api/configs"
 	"github.com/xinliangnote/go-gin-api/internal/pkg/core"
 	service "github.com/xinliangnote/go-gin-api/internal/services/person"
 )
@@ -46,7 +47,7 @@ func (h *handler) List() core.HandlerFunc {
 			where.Page, _ = strconv.Atoi(page_str)
 		}
 		if limit_str == "" {
-			where.Limit = 10
+			where.Limit = configs.ApiLimit
 		} else {
 			where.Limit, _ = strconv.Atoi(limit_str)
 		}
