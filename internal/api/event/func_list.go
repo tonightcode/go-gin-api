@@ -56,8 +56,8 @@ func (h *handler) List() core.HandlerFunc {
 		} else {
 			where.Limit, _ = strconv.Atoi(limit_str)
 		}
-		total, _ := h.eventService.Total(c, &where)
-		list, err := h.eventService.List(c, &where)
+		total, _ := h.service.Total(c, &where)
+		list, err := h.service.List(c, &where)
 		if err != nil {
 			c.AbortWithError(core.Error(
 				http.StatusBadRequest,
@@ -71,7 +71,7 @@ func (h *handler) List() core.HandlerFunc {
 		res.Total = total
 		res.List = make([]listData, len(list))
 		for k, v := range list {
-			t, _ := time.Parse("2006-01-02T15:04:05-07:00", v.HappendAt)
+			t, _ := time.Parse("2006-01-02", v.HappendAt)
 			data := listData{
 				Id:         v.Id,
 				Title:      v.Title,

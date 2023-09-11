@@ -58,7 +58,7 @@ func (h *handler) List() core.HandlerFunc {
 		} else {
 			where.Limit, _ = strconv.Atoi(limit_str)
 		}
-		list, err := h.placeService.List(c, &where)
+		list, err := h.service.List(c, &where)
 		if err != nil {
 			c.AbortWithError(core.Error(
 				http.StatusBadRequest,

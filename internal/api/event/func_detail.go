@@ -48,8 +48,7 @@ func (h *handler) Detail() core.HandlerFunc {
 
 		where := new(service.Where)
 		where.Id = int32(id)
-
-		data, err := h.eventService.Detail(c, where)
+		data, err := h.service.Detail(c, where)
 
 		if err != nil {
 			c.AbortWithError(core.Error(
