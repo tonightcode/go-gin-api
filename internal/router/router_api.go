@@ -11,6 +11,7 @@ import (
 	"github.com/xinliangnote/go-gin-api/internal/api/order"
 	"github.com/xinliangnote/go-gin-api/internal/api/person"
 	"github.com/xinliangnote/go-gin-api/internal/api/place"
+	"github.com/xinliangnote/go-gin-api/internal/api/swiper"
 	"github.com/xinliangnote/go-gin-api/internal/api/tool"
 	"github.com/xinliangnote/go-gin-api/internal/pkg/core"
 )
@@ -127,5 +128,10 @@ func setApiRouter(r *resource) {
 		placeHandler := place.New(r.logger, r.db, r.cache)
 		font_api.GET("/place", placeHandler.List())
 		font_api.GET("/place/:id", placeHandler.Detail())
+
+		//swiper
+		swiperHandler := swiper.New(r.logger, r.db, r.cache)
+		font_api.GET("/swiper", swiperHandler.List())
+		font_api.GET("/swiper/:id", swiperHandler.Detail())
 	}
 }
