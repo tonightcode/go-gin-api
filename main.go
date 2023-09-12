@@ -31,6 +31,8 @@ import (
 // @in                          header
 // @name                        token
 
+// 热重载 go run github.com/cosmtrek/air
+
 // @BasePath /
 func main() {
 	// 初始化 access logger
