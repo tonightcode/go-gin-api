@@ -1,7 +1,7 @@
 package swiper
 
 import (
-	"github.com/xinliangnote/go-gin-api/internal/pkg/core"
+	"go-gin-api/internal/pkg/core"
 )
 
 type detailRequest struct{}

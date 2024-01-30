@@ -1,10 +1,10 @@
 package event
 
 import (
-	"github.com/xinliangnote/go-gin-api/internal/pkg/core"
-	"github.com/xinliangnote/go-gin-api/internal/repository/mysql"
-	entity "github.com/xinliangnote/go-gin-api/internal/repository/mysql/event"
-	"github.com/xinliangnote/go-gin-api/internal/repository/redis"
+	"go-gin-api/internal/pkg/core"
+	"go-gin-api/internal/repository/mysql"
+	entity "go-gin-api/internal/repository/mysql/event"
+	"go-gin-api/internal/repository/redis"
 )
 
 var _ Service = (*service)(nil)

@@ -1,10 +1,10 @@
 package place
 
 import (
-	"github.com/xinliangnote/go-gin-api/internal/pkg/core"
-	"github.com/xinliangnote/go-gin-api/internal/repository/mysql"
-	entity "github.com/xinliangnote/go-gin-api/internal/repository/mysql/place"
-	"github.com/xinliangnote/go-gin-api/internal/repository/redis"
+	"go-gin-api/internal/pkg/core"
+	"go-gin-api/internal/repository/mysql"
+	entity "go-gin-api/internal/repository/mysql/place"
+	"go-gin-api/internal/repository/redis"
 )
 
 var _ Service = (*service)(nil)

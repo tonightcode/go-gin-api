@@ -5,10 +5,10 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/xinliangnote/go-gin-api/configs"
-	"github.com/xinliangnote/go-gin-api/internal/code"
-	"github.com/xinliangnote/go-gin-api/internal/pkg/core"
-	service "github.com/xinliangnote/go-gin-api/internal/services/event"
+	"go-gin-api/configs"
+	"go-gin-api/internal/code"
+	"go-gin-api/internal/pkg/core"
+	service "go-gin-api/internal/services/event"
 )
 
 type listData struct {

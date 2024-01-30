@@ -1,9 +1,9 @@
 package event
 
 import (
-	"github.com/xinliangnote/go-gin-api/internal/pkg/core"
-	"github.com/xinliangnote/go-gin-api/internal/repository/mysql"
-	entity "github.com/xinliangnote/go-gin-api/internal/repository/mysql/event"
+	"go-gin-api/internal/pkg/core"
+	"go-gin-api/internal/repository/mysql"
+	entity "go-gin-api/internal/repository/mysql/event"
 )
 
 func (s *service) Total(ctx core.Context, where *Where) (total int64, err error) {

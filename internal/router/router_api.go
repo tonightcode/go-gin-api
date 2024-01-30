@@ -1,19 +1,22 @@
 package router
 
 import (
-	"github.com/xinliangnote/go-gin-api/internal/api/admin"
-	"github.com/xinliangnote/go-gin-api/internal/api/authorized"
-	"github.com/xinliangnote/go-gin-api/internal/api/config"
-	"github.com/xinliangnote/go-gin-api/internal/api/cron"
-	"github.com/xinliangnote/go-gin-api/internal/api/event"
-	"github.com/xinliangnote/go-gin-api/internal/api/helper"
-	"github.com/xinliangnote/go-gin-api/internal/api/menu"
-	"github.com/xinliangnote/go-gin-api/internal/api/order"
-	"github.com/xinliangnote/go-gin-api/internal/api/person"
-	"github.com/xinliangnote/go-gin-api/internal/api/place"
-	"github.com/xinliangnote/go-gin-api/internal/api/swiper"
-	"github.com/xinliangnote/go-gin-api/internal/api/tool"
-	"github.com/xinliangnote/go-gin-api/internal/pkg/core"
+	"go-gin-api/internal/api/admin"
+	"go-gin-api/internal/api/authorized"
+	"go-gin-api/internal/api/config"
+	"go-gin-api/internal/api/cron"
+	"go-gin-api/internal/api/event"
+	"go-gin-api/internal/api/helper"
+	"go-gin-api/internal/api/menu"
+	"go-gin-api/internal/api/order"
+	"go-gin-api/internal/api/person"
+	"go-gin-api/internal/api/place"
+	"go-gin-api/internal/api/singer"
+	"go-gin-api/internal/api/song"
+	"go-gin-api/internal/api/swiper"
+	"go-gin-api/internal/api/tool"
+	"go-gin-api/internal/api/top"
+	"go-gin-api/internal/pkg/core"
 )
 
 func setApiRouter(r *resource) {
@@ -133,5 +136,20 @@ func setApiRouter(r *resource) {
 		swiperHandler := swiper.New(r.logger, r.db, r.cache)
 		font_api.GET("/swiper", swiperHandler.List())
 		font_api.GET("/swiper/:id", swiperHandler.Detail())
+
+		//song
+		songHandler := song.New(r.logger, r.db, r.cache)
+		font_api.GET("/song", songHandler.List())
+		font_api.GET("/song/:id", songHandler.Detail())
+
+		//singer
+		singerHandler := singer.New(r.logger, r.db, r.cache)
+		font_api.GET("/signer", singerHandler.List())
+		font_api.GET("/signer/:id", singerHandler.Detail())
+
+		//top
+		topHandler := top.New(r.logger, r.db, r.cache)
+		font_api.GET("/top", topHandler.List())
+		font_api.GET("/top/:id", topHandler.Detail())
 	}
 }

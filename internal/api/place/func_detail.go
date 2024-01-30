@@ -5,9 +5,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/xinliangnote/go-gin-api/internal/code"
-	"github.com/xinliangnote/go-gin-api/internal/pkg/core"
-	service "github.com/xinliangnote/go-gin-api/internal/services/place"
+	"go-gin-api/internal/code"
+	"go-gin-api/internal/pkg/core"
+	service "go-gin-api/internal/services/place"
 )
 
 type detailRequest struct {

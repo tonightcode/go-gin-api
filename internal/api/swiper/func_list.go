@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/xinliangnote/go-gin-api/internal/code"
-	"github.com/xinliangnote/go-gin-api/internal/pkg/core"
-	service "github.com/xinliangnote/go-gin-api/internal/services/swiper"
+	"go-gin-api/internal/code"
+	"go-gin-api/internal/pkg/core"
+	service "go-gin-api/internal/services/swiper"
 )
 
 type listData struct {

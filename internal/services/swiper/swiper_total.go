@@ -1,9 +1,9 @@
 package swiper
 
 import (
-	"github.com/xinliangnote/go-gin-api/internal/pkg/core"
-	"github.com/xinliangnote/go-gin-api/internal/repository/mysql"
-	entity "github.com/xinliangnote/go-gin-api/internal/repository/mysql/swiper"
+	"go-gin-api/internal/pkg/core"
+	"go-gin-api/internal/repository/mysql"
+	entity "go-gin-api/internal/repository/mysql/swiper"
 )
 
 func (s *service) Total(ctx core.Context, where *Where) (total int64, err error) {
